@@ -2,7 +2,7 @@ class Netsecurex < Formula
   desc "Unified Cybersecurity Toolkit for Network Security Assessment"
   homepage "https://github.com/avis-enna/NetSecureX"
   url "https://github.com/avis-enna/NetSecureX/archive/refs/tags/v1.0.0.tar.gz"
-  sha256 "YOUR_SHA256_HASH_HERE"  # Will be calculated when you create the release
+  sha256 "8fca3c4ec4c4c10aca306bfe6f6ac2429e93ea2a0a72a48423974082d3886087"
   license "MIT"
   head "https://github.com/avis-enna/NetSecureX.git", branch: "main"
 
