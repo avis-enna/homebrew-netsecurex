@@ -13,14 +13,29 @@ class Netsecurex < Formula
     # Copy source files to libexec
     libexec.install Dir["*"]
 
-    # Install dependencies
+    # Install core dependencies manually
+    deps = %w[
+      click>=8.1.0
+      rich>=13.0.0
+      requests>=2.31.0
+      PyYAML>=6.0.0
+      cryptography>=41.0.0
+      aiohttp>=3.8.0
+      dnspython>=2.4.0
+      pydantic>=2.0.0
+      python-dateutil>=2.8.0
+      structlog>=23.0.0
+      tabulate>=0.9.0
+      netaddr>=0.8.0
+    ]
+
     system Formula["python@3.11"].opt_bin/"python3.11", "-m", "pip", "install",
-           "--target", libexec/"lib", "-r", libexec/"requirements.txt"
+           "--target", libexec/"lib", *deps
 
     # Create wrapper script
     (bin/"netsecx").write <<~EOS
       #!/bin/bash
-      export PYTHONPATH="#{libexec}/lib:$PYTHONPATH"
+      export PYTHONPATH="#{libexec}/lib:#{libexec}:$PYTHONPATH"
       cd "#{libexec}"
       exec "#{Formula["python@3.11"].opt_bin}/python3.11" "#{libexec}/main.py" "$@"
     EOS
