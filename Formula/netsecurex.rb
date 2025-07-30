@@ -10,15 +10,17 @@ class Netsecurex < Formula
   depends_on "openssl@3"
 
   def install
-    # Create virtualenv
-    venv = virtualenv_create(libexec, "python3.11")
+    # Get Python 3.11
+    python3 = which("python3.11") || which("python3")
+
+    # Create virtualenv in libexec
+    system python3, "-m", "venv", libexec
 
     # Install the package and its dependencies
-    venv.pip_install buildpath
+    system libexec/"bin/pip", "install", buildpath
 
-    # The setup.py entry points will create the executables
-    # Link the netsecx executable to bin
-    bin.install_symlink libexec/"bin/netsecx"
+    # Create wrapper script for netsecx command
+    (bin/"netsecx").write_env_script(libexec/"bin/python", buildpath/"main.py")
 
     # Install configuration directory
     (etc/"netsecurex").mkpath
