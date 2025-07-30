@@ -9,38 +9,16 @@ class Netsecurex < Formula
   depends_on "python@3.11"
   depends_on "openssl@3"
 
-  # Python dependencies
-  resource "click" do
-    url "https://files.pythonhosted.org/packages/96/d3/f04c7bfcf5c1862a2a5b845c6b2b360488cf47af55dfa79c98f6a6bf98b5/click-8.2.1.tar.gz"
-    sha256 "7682dc8afb30297001674575ea00d1814d808d6a36af415a82bd481d37ba7b8e"
-  end
-
-  resource "rich" do
-    url "https://files.pythonhosted.org/packages/87/67/a37f6214d0e9fe57f6c54024d76ef72ca080bf8e54b2e41ab7dfb595bb929/rich-14.1.0.tar.gz"
-    sha256 "8260cda28e3db6bf04d2d1ef4dbc03ba80a824c88b0e7668a0f23126a424844a"
-  end
-
-  resource "requests" do
-    url "https://files.pythonhosted.org/packages/63/70/2bf7780ad2d390a8d301ad0b550f1581eadbd9a20f896afe06353c2a2913/requests-2.32.4.tar.gz"
-    sha256 "55365417734eb18255590a9c9e97d9d1d5d5e4f0f7c8b5c0f4c0b8b8b8b8b8b8"
-  end
-
-  resource "cryptography" do
-    url "https://files.pythonhosted.org/packages/de/ba/0664727028b37e249e73879348cc46d45c5c1a2a2e81e8166462953c5755/cryptography-45.0.5.tar.gz"
-    sha256 "8780356d5b4909907c6ac24b2e1b5b2d1c9c8496a9c5c9c8c8c8c8c8c8c8c8c8"
-  end
-
   def install
     # Create virtualenv
     venv = virtualenv_create(libexec, "python3.11")
-    
-    # Install Python dependencies
-    venv.pip_install resources
+
+    # Install the package and its dependencies
     venv.pip_install buildpath
 
-    # Create the main executable
-    (bin/"netsecx").write_env_script libexec/"bin/python", libexec/"bin/netsecurex",
-      PATH: "#{libexec}/bin:$PATH"
+    # The setup.py entry points will create the executables
+    # Link the netsecx executable to bin
+    bin.install_symlink libexec/"bin/netsecx"
 
     # Install configuration directory
     (etc/"netsecurex").mkpath
